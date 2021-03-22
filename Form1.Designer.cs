@@ -28,11 +28,12 @@ namespace DisplacementAlphaTools {
             this.PreviewLabel = new System.Windows.Forms.Label();
             this.MenuStrip = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.loadImageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.loadVMFToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.LoadImageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.LoadVMFToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.SaveButton = new System.Windows.Forms.Button();
+            this.ResizeImageCheckbox = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.PreviewPictureBox)).BeginInit();
             this.MenuStrip.SuspendLayout();
             this.SuspendLayout();
@@ -69,25 +70,25 @@ namespace DisplacementAlphaTools {
             // fileToolStripMenuItem
             // 
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.loadImageToolStripMenuItem,
-            this.loadVMFToolStripMenuItem});
+            this.LoadImageToolStripMenuItem,
+            this.LoadVMFToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             this.fileToolStripMenuItem.Text = "File";
             // 
-            // loadImageToolStripMenuItem
+            // LoadImageToolStripMenuItem
             // 
-            this.loadImageToolStripMenuItem.Name = "loadImageToolStripMenuItem";
-            this.loadImageToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
-            this.loadImageToolStripMenuItem.Text = "Load Image";
-            this.loadImageToolStripMenuItem.Click += new System.EventHandler(this.loadImageToolStripMenuItem_Click);
+            this.LoadImageToolStripMenuItem.Name = "LoadImageToolStripMenuItem";
+            this.LoadImageToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
+            this.LoadImageToolStripMenuItem.Text = "Load Image";
+            this.LoadImageToolStripMenuItem.Click += new System.EventHandler(this.LoadImageToolStripMenuItem_Click);
             // 
-            // loadVMFToolStripMenuItem
+            // LoadVMFToolStripMenuItem
             // 
-            this.loadVMFToolStripMenuItem.Name = "loadVMFToolStripMenuItem";
-            this.loadVMFToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
-            this.loadVMFToolStripMenuItem.Text = "Load VMF";
-            this.loadVMFToolStripMenuItem.Click += new System.EventHandler(this.loadVMFToolStripMenuItem_Click);
+            this.LoadVMFToolStripMenuItem.Name = "LoadVMFToolStripMenuItem";
+            this.LoadVMFToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
+            this.LoadVMFToolStripMenuItem.Text = "Load VMF";
+            this.LoadVMFToolStripMenuItem.Click += new System.EventHandler(this.LoadVMFToolStripMenuItem_Click);
             // 
             // helpToolStripMenuItem
             // 
@@ -115,11 +116,23 @@ namespace DisplacementAlphaTools {
             this.SaveButton.UseVisualStyleBackColor = true;
             this.SaveButton.Click += new System.EventHandler(this.SaveButton_Click);
             // 
+            // ResizeImageCheckbox
+            // 
+            this.ResizeImageCheckbox.AutoSize = true;
+            this.ResizeImageCheckbox.Location = new System.Drawing.Point(275, 410);
+            this.ResizeImageCheckbox.Name = "ResizeImageCheckbox";
+            this.ResizeImageCheckbox.Size = new System.Drawing.Size(112, 17);
+            this.ResizeImageCheckbox.TabIndex = 5;
+            this.ResizeImageCheckbox.Text = "Resize image to fit";
+            this.ResizeImageCheckbox.UseVisualStyleBackColor = true;
+            this.ResizeImageCheckbox.CheckedChanged += new System.EventHandler(this.ResizeImageCheckbox_CheckedChanged);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(399, 441);
+            this.Controls.Add(this.ResizeImageCheckbox);
             this.Controls.Add(this.SaveButton);
             this.Controls.Add(this.PreviewLabel);
             this.Controls.Add(this.PreviewPictureBox);
@@ -144,10 +157,11 @@ namespace DisplacementAlphaTools {
         private System.Windows.Forms.MenuStrip MenuStrip;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem loadImageToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem LoadImageToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
         private System.Windows.Forms.Button SaveButton;
-        private System.Windows.Forms.ToolStripMenuItem loadVMFToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem LoadVMFToolStripMenuItem;
+        private System.Windows.Forms.CheckBox ResizeImageCheckbox;
     }
 }
 

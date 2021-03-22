@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Linq;
@@ -30,9 +32,13 @@ namespace DisplacementAlphaTools {
 
             PreviewPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             PreviewPictureBox.BackColor = Color.FromArgb(255, 127, 127, 127);
+            // These are disabled when nothing is loaded:
+            SaveButton.Enabled = false;
+            ResizeImageCheckbox.Enabled = false;
         }
 
         public static Bitmap ImageData { get; set; }
+        public static Bitmap ImageDataOriginal { get; set; }
         public static string VMFData { get; set; }
         // True = image, false = VMF.
         public static bool OpenedFileIsImage;
@@ -98,6 +104,33 @@ namespace DisplacementAlphaTools {
                 gY * InverseGamma_sRGB(c.G) +
                 bY * InverseGamma_sRGB(c.B)
             );
+        }
+
+
+        // Credits to user "mpen" of Stack Overflow for this function.
+        // March 2021,
+        // https://stackoverflow.com/questions/1922040/how-to-resize-an-image-c-sharp
+        // https://stackoverflow.com/users/65387/mpen
+        private static Bitmap ResizeImage(Image image, int width, int height) {
+            var destRect = new Rectangle(0, 0, width, height);
+            var destImage = new Bitmap(width, height);
+
+            destImage.SetResolution(image.HorizontalResolution, image.VerticalResolution);
+
+            using (var graphics = Graphics.FromImage(destImage)) {
+                graphics.CompositingMode = CompositingMode.SourceCopy;
+                graphics.CompositingQuality = CompositingQuality.HighQuality;
+                graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                graphics.SmoothingMode = SmoothingMode.HighQuality;
+                graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
+
+                using (var wrapMode = new ImageAttributes()) {
+                    wrapMode.SetWrapMode(WrapMode.TileFlipXY);
+                    graphics.DrawImage(image, destRect, 0, 0, image.Width, image.Height, GraphicsUnit.Pixel, wrapMode);
+                }
+            }
+
+            return destImage;
         }
 
 
@@ -172,7 +205,7 @@ namespace DisplacementAlphaTools {
             int finalHeight = 8 * yRequired + 1;
 
             Bitmap imgTemp = new Bitmap(img);
-            Bitmap bottomLayer = new Bitmap(finalWidth, finalHeight, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+            Bitmap bottomLayer = new Bitmap(finalWidth, finalHeight, PixelFormat.Format24bppRgb);
 
             for (int y = 0; y < imgTemp.Height; y++) {
                 for (int x = 0; x < imgTemp.Width; x++) {
@@ -183,9 +216,9 @@ namespace DisplacementAlphaTools {
                 }
             }
 
-            Bitmap finalImage = new Bitmap(finalWidth, finalHeight, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+            Bitmap finalImage = new Bitmap(finalWidth, finalHeight, PixelFormat.Format32bppArgb);
             using (var graphics = Graphics.FromImage(finalImage)) {
-                graphics.CompositingMode = System.Drawing.Drawing2D.CompositingMode.SourceOver;
+                graphics.CompositingMode = CompositingMode.SourceOver;
 
                 graphics.DrawImage(bottomLayer, 0, 0);
                 graphics.DrawImage(imgTemp, 0, 0);
@@ -196,13 +229,18 @@ namespace DisplacementAlphaTools {
 
 
 
-        private void loadImageToolStripMenuItem_Click(object sender, EventArgs e) {
+        private void LoadImageToolStripMenuItem_Click(object sender, EventArgs e) {
             using (OpenFileDialog ofd1 = new OpenFileDialog()) {
                 ofd1.Title = "Open Picture";
                 ofd1.Filter = "Image Files (*.png;*.jpg;*.bmp)|*.png;*.jpg;*.bmp";
 
                 if (ofd1.ShowDialog() == DialogResult.OK) {
                     SaveButton.Text = "Save as .vmf";
+                    SaveButton.Enabled = true;
+                    ResizeImageCheckbox.Enabled = true;
+                    ResizeImageCheckbox.Checked = false;
+                    PreviewLabel.Text = "- Preview (Image):";
+                    OpenedFileIsImage = true;
 
                     Image tempImg = Image.FromFile(ofd1.FileName);
                     // These values need to be assigned before the preview image and ImageData can proceed.
@@ -217,19 +255,23 @@ namespace DisplacementAlphaTools {
 
                     PreviewPictureBox.Image = CreatePreviewImage(tempImg);
                     ImageData = (Bitmap)PreviewPictureBox.Image;
-                    OpenedFileIsImage = true;
+                    ImageDataOriginal = (Bitmap)tempImg;
                 }
             }
         }
 
 
-        private void loadVMFToolStripMenuItem_Click(object sender, EventArgs e) {
+        private void LoadVMFToolStripMenuItem_Click(object sender, EventArgs e) {
             using (OpenFileDialog ofd1 = new OpenFileDialog()) {
                 ofd1.Title = "Open Valve Map File";
                 ofd1.Filter = "Valve Map File (*.vmf)|*.vmf";
-                if (ofd1.ShowDialog() == DialogResult.OK) {
 
+                if (ofd1.ShowDialog() == DialogResult.OK) {
                     SaveButton.Text = "Save as image";
+                    SaveButton.Enabled = true;
+                    ResizeImageCheckbox.Enabled = false;
+                    ResizeImageCheckbox.Checked = false;
+                    PreviewLabel.Text = "- Preview (VMF):";
 
                     OpenedFileIsImage = false;
 
@@ -245,7 +287,6 @@ namespace DisplacementAlphaTools {
                         // Get the index of the match and fetch everything from its starting brace to its closing brace.
                         int start = displacementSideStartMatches[i].Groups[1].Index;
                         int end;
-                        bool foundDispInfo = false;
                         int braceCount = 1;
                         int currIndex = start;
                         //Console.WriteLine($"Starting index of brace: {start}, character at index is: {VMFData[start]}");
@@ -474,6 +515,19 @@ namespace DisplacementAlphaTools {
                 if (sfd1.FileName != "") {
                     PreviewPictureBox.Image.Save(sfd1.FileName);
                 }
+            }
+        }
+
+        
+        private void ResizeImageCheckbox_CheckedChanged(object sender, EventArgs e) {
+            if (ResizeImageCheckbox.Checked && (ImageDataOriginal.Width != ImageData.Width || ImageDataOriginal.Height != ImageData.Height)) {
+                Bitmap resizedImage = ResizeImage(ImageDataOriginal, PreviewPictureBox.Image.Width, PreviewPictureBox.Image.Height);
+                PreviewPictureBox.Image = CreatePreviewImage(resizedImage);
+                ImageData = (Bitmap)PreviewPictureBox.Image;
+            }
+            else {
+                PreviewPictureBox.Image = CreatePreviewImage(ImageDataOriginal);
+                ImageData = (Bitmap)PreviewPictureBox.Image;
             }
         }
     }
