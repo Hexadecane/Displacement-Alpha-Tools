@@ -464,7 +464,7 @@ namespace DisplacementAlphaTools {
 
                 for (int n = 0; n < solids.Count; n++) {
                     int col = n % xRequired;
-                    int row = n / yRequired;  // What row the given n value would put us on.
+                    int row = n / xRequired;  // What row the given n value would put us on.
                     string alphaPaintData = "";
                     // Iterate over the Y coord values of a displacement brush:
                     for (int y = 0; y < 9; y++) {
