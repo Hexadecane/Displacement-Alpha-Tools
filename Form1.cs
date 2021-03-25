@@ -56,22 +56,25 @@ namespace DisplacementAlphaTools {
         // A 33x33 image = 4x4 displacement(s).
         // A 41x41 image = 5x5 displacement(s).
 
-        // The pattern is simply:
-        // if (n == 1) size = 9
-        // if (n > 1) size = 9 + 8*(n - 1)
+        // Starting from an index of one, the pattern is simply:
+        // size = 8(n) + 1
+        // Starting from an index of zero, the pattern is simply:
+        // size = 8(n+1) + 1
 
-        // 8 * (n+1) + 1
+        // Extending this to other displacement powers, the pattern is just:
+        // p = 2^displacementPower + 1  (for the number of sides)
+        // size = (2^displacementPower)*(n) + 1  (for the resulting image size)
 
         static int xRequired;
         static int yRequired;
         static int imgWidth;
         static int imgHeight;
 
-
         // sRGB luminance(Y) values
         public const double rY = 0.212655;
         public const double gY = 0.715158;
         public const double bY = 0.072187;
+
 
         // Inverse of sRGB "gamma" function. (approx 2.2)
         static double InverseGamma_sRGB(int ic) {
@@ -246,12 +249,14 @@ namespace DisplacementAlphaTools {
                     // These values need to be assigned before the preview image and ImageData can proceed.
                     imgWidth = tempImg.Width;
                     imgHeight = tempImg.Height;
-                    // (n - 9) / 8 + 1
-                    xRequired = (imgWidth < 9) ? 1 : Convert.ToInt32(Math.Ceiling(Convert.ToDouble(imgWidth - 9) / 8.0)) + 1;
-                    yRequired = (imgHeight < 9) ? 1 : Convert.ToInt32(Math.Ceiling(Convert.ToDouble(imgHeight - 9) / 8.0)) + 1;
+                    // Inverse of 8n + 1 is (n - 1) / 8.
+                    xRequired = (imgWidth < 9) ? 1 : Convert.ToInt32(Math.Ceiling(Convert.ToDouble(imgWidth - 1) / 8.0));
+                    yRequired = (imgHeight < 9) ? 1 : Convert.ToInt32(Math.Ceiling(Convert.ToDouble(imgHeight - 1) / 8.0));
 
+                    Console.WriteLine($"Image size is {imgWidth}x{imgHeight}");
                     Console.WriteLine($"xRequired: {xRequired}");
                     Console.WriteLine($"yRequired: {yRequired}");
+                    Console.WriteLine($"Required alpha painting size is {8*xRequired + 1}x{8*yRequired + 1}");
 
                     PreviewPictureBox.Image = CreatePreviewImage(tempImg);
                     ImageData = (Bitmap)PreviewPictureBox.Image;
@@ -380,9 +385,9 @@ namespace DisplacementAlphaTools {
                     Console.WriteLine(xRequired);
                     Console.WriteLine(yRequired);
 
-                    // 8 * (n+1) + 1
-                    imgWidth = 8 * (xRequired + 1) + 1;
-                    imgHeight = 8 * (yRequired + 1) + 1;
+                    // 8(n) + 1
+                    imgWidth = 8 * (xRequired) + 1;
+                    imgHeight = 8 * (yRequired) + 1;
                     Console.WriteLine("---\nFinal image size:");
                     Console.WriteLine(imgWidth);
                     Console.WriteLine(imgHeight);
@@ -440,6 +445,14 @@ namespace DisplacementAlphaTools {
                 int[,] SP4 = { { bSize, 0, 0 }, { bSize, -bSize, 0 }, { bSize, -bSize, bSize / 2 } };
                 int[,] SP5 = { { 0, 0, 0 }, { bSize, 0, 0 }, { bSize, 0, bSize / 2 } };
                 int[,] SP6 = { { bSize, -bSize, 0 }, { 0, -bSize, 0 }, { 0, -bSize, bSize / 2 } };
+                List<int[,]> SPList = new List<int[,]>() {
+                    SP1,
+                    SP2,
+                    SP3,
+                    SP4,
+                    SP5,
+                    SP6
+                };
 
                 List<string> solids = new List<string>();
 
@@ -449,13 +462,13 @@ namespace DisplacementAlphaTools {
                         newSolid = newSolid
                             .Replace("$ID", Convert.ToString(solidID))
                             .Replace("$COLOR", $"{rng.Next(96, 256)} {rng.Next(96, 256)} {rng.Next(96, 256)}")
-                            .Replace("$START_POS", $"{x * bSize} {-bSize * (y + 1)} 0")
-                            .Replace("$PLANE_1", SidePlaneArrayToString(SP1, x * bSize, y * bSize))
-                            .Replace("$PLANE_2", SidePlaneArrayToString(SP2, x * bSize, y * bSize))
-                            .Replace("$PLANE_3", SidePlaneArrayToString(SP3, x * bSize, y * bSize))
-                            .Replace("$PLANE_4", SidePlaneArrayToString(SP4, x * bSize, y * bSize))
-                            .Replace("$PLANE_5", SidePlaneArrayToString(SP5, x * bSize, y * bSize))
-                            .Replace("$PLANE_6", SidePlaneArrayToString(SP6, x * bSize, y * bSize));
+                            .Replace("$START_POS", $"{x * bSize} {-bSize * (y + 1)} 0");
+
+                        for (int i = 0; i < SPList.Count; i++) {
+                            newSolid = newSolid.Replace($"$PLANE_{i + 1}", SidePlaneArrayToString(SPList[i], x * bSize, y * bSize));
+                            newSolid = newSolid.Replace($"$SIDEID_{i + 1}", Convert.ToString(solidID));
+                            solidID++;
+                        }
 
                         solidID++;
                         solids.Add(newSolid);
