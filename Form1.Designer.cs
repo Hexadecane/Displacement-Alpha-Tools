@@ -34,8 +34,18 @@ namespace DisplacementAlphaTools {
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.SaveButton = new System.Windows.Forms.Button();
             this.ResizeImageCheckbox = new System.Windows.Forms.CheckBox();
+            this.PixelWidthLabel = new System.Windows.Forms.Label();
+            this.PixelHeightLabel = new System.Windows.Forms.Label();
+            this.Divider = new System.Windows.Forms.Label();
+            this.DisplacementCountHorizontalLabel = new System.Windows.Forms.Label();
+            this.DisplacementCountVerticalLabel = new System.Windows.Forms.Label();
+            this.DisplacementPowerNumericUpDown = new System.Windows.Forms.NumericUpDown();
+            this.DisplacementPowerControlLabel = new System.Windows.Forms.Label();
+            this.PixelWidthRequiredLabel = new System.Windows.Forms.Label();
+            this.PixelHeightRequiredLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.PreviewPictureBox)).BeginInit();
             this.MenuStrip.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.DisplacementPowerNumericUpDown)).BeginInit();
             this.SuspendLayout();
             // 
             // PreviewPictureBox
@@ -108,7 +118,7 @@ namespace DisplacementAlphaTools {
             // 
             this.SaveButton.AutoSize = true;
             this.SaveButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.SaveButton.Location = new System.Drawing.Point(12, 406);
+            this.SaveButton.Location = new System.Drawing.Point(12, 404);
             this.SaveButton.Name = "SaveButton";
             this.SaveButton.Size = new System.Drawing.Size(79, 23);
             this.SaveButton.TabIndex = 4;
@@ -119,7 +129,7 @@ namespace DisplacementAlphaTools {
             // ResizeImageCheckbox
             // 
             this.ResizeImageCheckbox.AutoSize = true;
-            this.ResizeImageCheckbox.Location = new System.Drawing.Point(275, 410);
+            this.ResizeImageCheckbox.Location = new System.Drawing.Point(275, 408);
             this.ResizeImageCheckbox.Name = "ResizeImageCheckbox";
             this.ResizeImageCheckbox.Size = new System.Drawing.Size(112, 17);
             this.ResizeImageCheckbox.TabIndex = 5;
@@ -127,11 +137,130 @@ namespace DisplacementAlphaTools {
             this.ResizeImageCheckbox.UseVisualStyleBackColor = true;
             this.ResizeImageCheckbox.CheckedChanged += new System.EventHandler(this.ResizeImageCheckbox_CheckedChanged);
             // 
+            // PixelWidthLabel
+            // 
+            this.PixelWidthLabel.AutoSize = true;
+            this.PixelWidthLabel.Enabled = false;
+            this.PixelWidthLabel.Location = new System.Drawing.Point(9, 445);
+            this.PixelWidthLabel.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.PixelWidthLabel.Name = "PixelWidthLabel";
+            this.PixelWidthLabel.Size = new System.Drawing.Size(38, 13);
+            this.PixelWidthLabel.TabIndex = 7;
+            this.PixelWidthLabel.Text = "Width:";
+            // 
+            // PixelHeightLabel
+            // 
+            this.PixelHeightLabel.AutoSize = true;
+            this.PixelHeightLabel.Enabled = false;
+            this.PixelHeightLabel.Location = new System.Drawing.Point(9, 460);
+            this.PixelHeightLabel.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.PixelHeightLabel.Name = "PixelHeightLabel";
+            this.PixelHeightLabel.Size = new System.Drawing.Size(41, 13);
+            this.PixelHeightLabel.TabIndex = 8;
+            this.PixelHeightLabel.Text = "Height:";
+            // 
+            // Divider
+            // 
+            this.Divider.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.Divider.Location = new System.Drawing.Point(12, 437);
+            this.Divider.Margin = new System.Windows.Forms.Padding(5);
+            this.Divider.Name = "Divider";
+            this.Divider.Size = new System.Drawing.Size(375, 2);
+            this.Divider.TabIndex = 9;
+            // 
+            // DisplacementCountHorizontalLabel
+            // 
+            this.DisplacementCountHorizontalLabel.AutoSize = true;
+            this.DisplacementCountHorizontalLabel.Enabled = false;
+            this.DisplacementCountHorizontalLabel.Location = new System.Drawing.Point(9, 475);
+            this.DisplacementCountHorizontalLabel.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.DisplacementCountHorizontalLabel.Name = "DisplacementCountHorizontalLabel";
+            this.DisplacementCountHorizontalLabel.Size = new System.Drawing.Size(100, 13);
+            this.DisplacementCountHorizontalLabel.TabIndex = 10;
+            this.DisplacementCountHorizontalLabel.Text = "Horizontal Disp. Ct.:";
+            // 
+            // DisplacementCountVerticalLabel
+            // 
+            this.DisplacementCountVerticalLabel.AutoSize = true;
+            this.DisplacementCountVerticalLabel.Enabled = false;
+            this.DisplacementCountVerticalLabel.Location = new System.Drawing.Point(9, 490);
+            this.DisplacementCountVerticalLabel.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.DisplacementCountVerticalLabel.Name = "DisplacementCountVerticalLabel";
+            this.DisplacementCountVerticalLabel.Size = new System.Drawing.Size(88, 13);
+            this.DisplacementCountVerticalLabel.TabIndex = 11;
+            this.DisplacementCountVerticalLabel.Text = "Vertical Disp. Ct.:";
+            // 
+            // DisplacementPowerNumericUpDown
+            // 
+            this.DisplacementPowerNumericUpDown.Enabled = false;
+            this.DisplacementPowerNumericUpDown.Location = new System.Drawing.Point(217, 407);
+            this.DisplacementPowerNumericUpDown.Margin = new System.Windows.Forms.Padding(0, 3, 3, 3);
+            this.DisplacementPowerNumericUpDown.Maximum = new decimal(new int[] {
+            4,
+            0,
+            0,
+            0});
+            this.DisplacementPowerNumericUpDown.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.DisplacementPowerNumericUpDown.Name = "DisplacementPowerNumericUpDown";
+            this.DisplacementPowerNumericUpDown.Size = new System.Drawing.Size(31, 20);
+            this.DisplacementPowerNumericUpDown.TabIndex = 12;
+            this.DisplacementPowerNumericUpDown.Value = new decimal(new int[] {
+            3,
+            0,
+            0,
+            0});
+            // 
+            // DisplacementPowerControlLabel
+            // 
+            this.DisplacementPowerControlLabel.AutoSize = true;
+            this.DisplacementPowerControlLabel.Enabled = false;
+            this.DisplacementPowerControlLabel.Location = new System.Drawing.Point(150, 409);
+            this.DisplacementPowerControlLabel.Margin = new System.Windows.Forms.Padding(3, 0, 0, 0);
+            this.DisplacementPowerControlLabel.Name = "DisplacementPowerControlLabel";
+            this.DisplacementPowerControlLabel.Size = new System.Drawing.Size(67, 13);
+            this.DisplacementPowerControlLabel.TabIndex = 13;
+            this.DisplacementPowerControlLabel.Text = "Disp. Power:";
+            // 
+            // PixelWidthRequiredLabel
+            // 
+            this.PixelWidthRequiredLabel.AutoSize = true;
+            this.PixelWidthRequiredLabel.Enabled = false;
+            this.PixelWidthRequiredLabel.Location = new System.Drawing.Point(158, 445);
+            this.PixelWidthRequiredLabel.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.PixelWidthRequiredLabel.Name = "PixelWidthRequiredLabel";
+            this.PixelWidthRequiredLabel.Size = new System.Drawing.Size(84, 13);
+            this.PixelWidthRequiredLabel.TabIndex = 14;
+            this.PixelWidthRequiredLabel.Text = "Required Width:";
+            // 
+            // PixelHeightRequiredLabel
+            // 
+            this.PixelHeightRequiredLabel.AutoSize = true;
+            this.PixelHeightRequiredLabel.Enabled = false;
+            this.PixelHeightRequiredLabel.Location = new System.Drawing.Point(156, 460);
+            this.PixelHeightRequiredLabel.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.PixelHeightRequiredLabel.Name = "PixelHeightRequiredLabel";
+            this.PixelHeightRequiredLabel.Size = new System.Drawing.Size(87, 13);
+            this.PixelHeightRequiredLabel.TabIndex = 15;
+            this.PixelHeightRequiredLabel.Text = "Required Height:";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(399, 441);
+            this.ClientSize = new System.Drawing.Size(399, 515);
+            this.Controls.Add(this.PixelHeightRequiredLabel);
+            this.Controls.Add(this.PixelWidthRequiredLabel);
+            this.Controls.Add(this.DisplacementPowerControlLabel);
+            this.Controls.Add(this.DisplacementPowerNumericUpDown);
+            this.Controls.Add(this.DisplacementCountVerticalLabel);
+            this.Controls.Add(this.DisplacementCountHorizontalLabel);
+            this.Controls.Add(this.Divider);
+            this.Controls.Add(this.PixelHeightLabel);
+            this.Controls.Add(this.PixelWidthLabel);
             this.Controls.Add(this.ResizeImageCheckbox);
             this.Controls.Add(this.SaveButton);
             this.Controls.Add(this.PreviewLabel);
@@ -145,6 +274,7 @@ namespace DisplacementAlphaTools {
             ((System.ComponentModel.ISupportInitialize)(this.PreviewPictureBox)).EndInit();
             this.MenuStrip.ResumeLayout(false);
             this.MenuStrip.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.DisplacementPowerNumericUpDown)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -162,6 +292,15 @@ namespace DisplacementAlphaTools {
         private System.Windows.Forms.Button SaveButton;
         private System.Windows.Forms.ToolStripMenuItem LoadVMFToolStripMenuItem;
         private System.Windows.Forms.CheckBox ResizeImageCheckbox;
+        private System.Windows.Forms.Label PixelWidthLabel;
+        private System.Windows.Forms.Label PixelHeightLabel;
+        private System.Windows.Forms.Label Divider;
+        private System.Windows.Forms.Label DisplacementCountHorizontalLabel;
+        private System.Windows.Forms.Label DisplacementCountVerticalLabel;
+        private System.Windows.Forms.NumericUpDown DisplacementPowerNumericUpDown;
+        private System.Windows.Forms.Label DisplacementPowerControlLabel;
+        private System.Windows.Forms.Label PixelWidthRequiredLabel;
+        private System.Windows.Forms.Label PixelHeightRequiredLabel;
     }
 }
 
