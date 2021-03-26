@@ -110,27 +110,6 @@ namespace DisplacementAlphaTools {
         }
 
 
-        void EnableAppUIElements() {
-            SaveButton.Enabled = true;
-            PixelWidthLabel.Enabled = true;
-            PixelHeightLabel.Enabled = true;
-            PixelWidthRequiredLabel.Enabled = true;
-            PixelHeightRequiredLabel.Enabled = true;
-            DisplacementCountHorizontalLabel.Enabled = true;
-            DisplacementCountVerticalLabel.Enabled = true;
-        }
-
-
-        void UpdateStatLabels(Image i) {
-            // Update the stats readout labels.
-            PixelWidthLabel.Text = $"Width: {i.Width}";
-            PixelHeightLabel.Text = $"Height: {i.Height}";
-            PixelWidthRequiredLabel.Text = $"Required Width: {xRequired*8 + 1}";
-            PixelHeightRequiredLabel.Text = $"Required Height: {yRequired*8 + 1}";
-            DisplacementCountVerticalLabel.Text = $"Vertical Disp. Ct.: {yRequired}";
-        }
-
-
         // Credits to user "mpen" of Stack Overflow for this function.
         // March 2021,
         // https://stackoverflow.com/questions/1922040/how-to-resize-an-image-c-sharp
@@ -260,12 +239,7 @@ namespace DisplacementAlphaTools {
 
                 if (ofd1.ShowDialog() == DialogResult.OK) {
                     SaveButton.Text = "Save as .vmf";
-
-                    EnableAppUIElements();
-
-                    // Commenting out displacement power controls until they're functional...
-                    //DisplacementPowerControlLabel.Enabled = true;
-                    //DisplacementPowerNumericUpDown.Enabled = true;
+                    SaveButton.Enabled = true;
                     ResizeImageCheckbox.Enabled = true;
                     ResizeImageCheckbox.Checked = false;
                     PreviewLabel.Text = "- Preview (Image):";
@@ -287,9 +261,6 @@ namespace DisplacementAlphaTools {
                     PreviewPictureBox.Image = CreatePreviewImage(tempImg);
                     ImageData = (Bitmap)PreviewPictureBox.Image;
                     ImageDataOriginal = (Bitmap)tempImg;
-
-                    // Update the stats readout labels.
-                    UpdateStatLabels(tempImg);
                 }
             }
         }
@@ -302,11 +273,7 @@ namespace DisplacementAlphaTools {
 
                 if (ofd1.ShowDialog() == DialogResult.OK) {
                     SaveButton.Text = "Save as image";
-
-                    EnableAppUIElements();
-
-                    DisplacementPowerControlLabel.Enabled = false;
-                    DisplacementPowerNumericUpDown.Enabled = false;
+                    SaveButton.Enabled = true;
                     ResizeImageCheckbox.Enabled = false;
                     ResizeImageCheckbox.Checked = false;
                     PreviewLabel.Text = "- Preview (VMF):";
@@ -451,9 +418,6 @@ namespace DisplacementAlphaTools {
                     }
 
                     PreviewPictureBox.Image = CreatePreviewImage(tempImage);
-
-                    // Update the stats readout labels.
-                    UpdateStatLabels(tempImage);
                 }
             }
         }
@@ -540,6 +504,10 @@ namespace DisplacementAlphaTools {
                 sOutput += File.ReadAllText("boilerplate_end.txt");
 
                 // Save to a file:
+                /*using (StreamWriter sw = new StreamWriter("output.vmf")) {
+                    sw.Write(sOutput);
+                }*/
+
                 SaveFileDialog sfd1 = new SaveFileDialog();
                 sfd1.Filter = "Valve Map File|*.vmf";
                 sfd1.Title = "Save as .vmf";
