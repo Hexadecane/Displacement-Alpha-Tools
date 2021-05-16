@@ -1,4 +1,4 @@
-# Displacement-Alpha-Tools
+# (OUTDATED AND DEPRECATED) Displacement-Alpha-Tools
 Application for converting Source Engine VMF displacement alpha painting to images, and vice-versa.
 
 Created by Hxdce.
